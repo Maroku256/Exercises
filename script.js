@@ -258,8 +258,9 @@ var snowman = function(x, y){
 snowman(50, 50);
 */
 
+/*
 var canvas = document.getElementById("canvas");
-    var ctx = canvas.getContext("2d");
+var ctx = canvas.getContext("2d");
 
     var drawPoints = function (points) {
       ctx.beginPath();
@@ -272,8 +273,258 @@ var canvas = document.getElementById("canvas");
 
     var mysteryPoints = [[50, 50], [50, 100], [25, 120], [100, 50], [70, 90], [100, 90], [70, 120]];
     drawPoints(mysteryPoints);
+*/
+
+//Задание 3
+/*
+var canvas = document.getElementById("canvas");
+var ctx = canvas.getContext("2d");
+
+var circle = function (x, y, radius, fillCircle) {
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, Math.PI * 2, false);
+    if (fillCircle) {
+    ctx.fill();
+    } else {
+    ctx.stroke();
+    }
+};
+
+$('canvas').mousemove(function (event) {
+    circle(event.offsetX, event.offsetY, 3, true);
+})*/
+
+//Задание 4
+/*
+var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+
+    var pickWord = function () {
+      var words = [
+      "программа",
+      "макака",
+      "прекрасный",
+      "оладушек"
+    ];
+
+      return words[Math.floor(Math.random() * words.length)];
+    };
+
+    var setupAnswerArray = function (word) {
+      var answerArray = [];
+      for (var i = 0; i < word.length; i++) {
+        answerArray[i] = "_";
+      }
+
+      return answerArray;
+    };
+
+    var showPlayerProgress = function (answerArray) {
+      alert(answerArray.join(" "));
+    };
+
+    var getGuess = function () {
+      return prompt("Угадайте букву, или нажмите Отмена для выхода из игры.");
+    };
+
+    var updateGameState = function (guess, word, answerArray) {
+      var appearances = 0;
+      for (var j = 0; j < word.length; j++) {
+        if (word[j] === guess) {
+          answerArray[j] = guess;
+          appearances++;
+        }
+      }
+
+      return appearances;
+    };
+
+    var showAnswerAndCongratulatePlayer = function (answerArray) {
+      showPlayerProgress(answerArray);
+      alert("Отлично! Было загадано слово " + answerArray.join(""));
+    };
+
+    var drawSegment = function (incorrectGuesses) {
+      ctx.lineWidth = 4;
+
+      if (incorrectGuesses === 0) {
+        ctx.strokeRect(20, 20, 20, 20);
+      } else if (incorrectGuesses === 1) {
+        ctx.beginPath();
+        ctx.moveTo(30, 40);
+        ctx.lineTo(30, 80);
+        ctx.stroke();
+      } else if (incorrectGuesses === 2) {
+        ctx.beginPath();
+        ctx.moveTo(30, 80);
+        ctx.lineTo(10, 110);
+        ctx.stroke();
+      } else if (incorrectGuesses === 3) {
+        ctx.beginPath();
+        ctx.moveTo(30, 80);
+        ctx.lineTo(50, 110);
+        ctx.stroke();
+      } else if (incorrectGuesses === 4) {
+        ctx.beginPath();
+        ctx.moveTo(30, 60);
+        ctx.lineTo(10, 50);
+        ctx.stroke();
+      } else if (incorrectGuesses === 5) {
+        ctx.beginPath();
+        ctx.moveTo(30, 60);
+        ctx.lineTo(50, 50);
+        ctx.stroke();
+      }
+    };
+
+    var word = pickWord();
+    var answerArray = setupAnswerArray(word);
+    var remainingLetters = word.length;
+    var incorrectGuesses = 0;
+
+    while (remainingLetters > 0) {
+      showPlayerProgress(answerArray);
+      var guess = getGuess();
+      if (guess === null) {
+        break;
+      } else if (guess.length !== 1) {
+        alert("Пожалуйста, введите одиночную букву.");
+      } else {
+        var correctGuesses = updateGameState(guess, word, answerArray);
+
+        remainingLetters -= correctGuesses;
+
+        if (correctGuesses === 0) {
+          drawSegment(incorrectGuesses);
+          incorrectGuesses++;
+        }
+      }
+    }
+
+    showAnswerAndCongratulatePlayer(answerArray);
+*/
 
 
+/*
+//Задание 1
+var Ball = function (){
+    this.x = 100;
+    this.y = 100;
+    this.xSpeed = -Math.floor(Math.random() * 10 -5);//Задание 2
+    this.ySpeed = Math.floor(Math.random() * 10 -5);//Задание 2
+    var colors = ["Red", "Orange", "Yellow", "Green", "Blue",  "Purple"];
+    this.color = pickRandomWord(colors);
+};
+
+var pickRandomWord = function (words) {
+    return words[Math.floor(Math.random() * words.length)];//Задание 4
+};
+
+var circle = function (x, y, radius, fillCircle){
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, Math.PI * 2, false);
+    if (fillCircle){
+        ctx.fill();
+    }else{
+        ctx.stroke();
+    }
+};
+Ball.prototype.draw = function(){
+    circle(this.x, this.y, 3, true);
+    ctx.fillStyle = this.color
+};
+
+Ball.prototype.move = function(){
+    this.x += this.xSpeed;
+    this.y += this.ySpeed;
+};
+
+Ball.prototype.checkCollision = function(){
+    if (this.x < 0 || this.x > canvas.width){
+        this.xSpeed = -this.xSpeed;
+    }
+    if (this.y < 0 || this.y > canvas.height){
+        this.ySpeed = -this.ySpeed;
+    }
+}
+
+var canvas = document.getElementById("canvas");
+var ctx = canvas.getContext("2d");
+var ball = new Ball;
+
+
+
+var balls = [];
+    for (var i = 0; i < 10; i++) {//Задание 3
+      balls[i] = new Ball();
+      
+    }
+setInterval(function(){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (var i = 0; i < 10; i++){
+        balls[i].draw();
+        balls[i].move();
+        balls[i].checkCollision();
+    }
+    ctx.strokeRect(0, 0, canvas.width, canvas.height);
+    console.log(balls[0].xSpeed);
+}, 10);
+
+*/
+var keyNames = {
+    32: "space",
+    37: "left",
+    38: "up",
+    39: "right",
+    40: "down",
+    16: "shift",
+    13: "enter",
+    18: "alt"
+
+}
+
+$("body").keydown(function(event){
+    console.log(keyNames[event.keyCode]);
+})
+
+var canvas = document.getElementById("canvas");
+var ctx = canvas.getContext("2d");
+var width = canvas.width;
+var height = canvas.height;
+var circle = function (x, y, radius, fillCircle){
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, Math.PI * 2, false);
+    if (fillCircle){
+        ctx.fill();
+    }else{
+        ctx.stroke();
+    }
+};
+var Ball = function (){
+    this.x = width / 2;
+    this.y = height / 2;
+    this.xSpeed = 5;
+    this.ySpeed = 0;
+};
+Ball.prototype.move = function(){
+    this.x += this.xSpeed;
+    this.y += this.ySpeed;
+
+    if(this.x < 0){
+        this.x = width;
+    }else if(this.x > width){
+        this.x = 0;
+    }
+    if(this.y < 0){
+        this.y = height;
+    }else if(this.y > height){
+        this.y = 0;
+    }
+};
+
+Ball.prototype.draw = function(){
+    circle(this.x, this.y, 10, true);
+}
 
 
 
